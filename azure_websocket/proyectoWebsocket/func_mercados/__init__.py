@@ -12,20 +12,20 @@ async def main(req: func.HttpRequest) -> func.HttpResponse:
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     DATA_DIR = os.path.join(BASE_DIR, "data")
 
-    # for date_str in os.listdir(DATA_DIR):
-    #     path = os.path.join(DATA_DIR, date_str)
-    #     # Verifica si la ruta es un directorio
-    #     if os.path.isdir(path):
-    #         # Llama a la función transform_orders
-    #         WEBSOCKET_FILE_PATH, ORDERS_PATH, NEW_ORDERS_PATH = get_file_paths(date_str)
-    #         print("-----------------")
-    #         print(f"ORDERS_PATH: {ORDERS_PATH}")
-    #         print(f"NEW_ORDERS_PATH: {NEW_ORDERS_PATH}")
-    #         transform_and_merge(ORDERS_PATH, NEW_ORDERS_PATH, WEBSOCKET_FILE_PATH)
-
-    WEBSOCKET_FILE_PATH, ORDERS_PATH, NEW_ORDERS_PATH = get_file_paths("20240129")
-    transform_and_merge(ORDERS_PATH, NEW_ORDERS_PATH, WEBSOCKET_FILE_PATH)
-
+    for date_str in os.listdir(DATA_DIR):
+        path = os.path.join(DATA_DIR, date_str)
+        # Verifica si la ruta es un directorio
+        if os.path.isdir(path):
+            # Llama a la función transform_orders
+            WEBSOCKET_FILE_PATH, ORDERS_PATH, NEW_ORDERS_PATH = get_file_paths(date_str)
+            print("-----------------")
+            print(f"ORDERS_PATH: {ORDERS_PATH}")
+            print(f"NEW_ORDERS_PATH: {NEW_ORDERS_PATH}")
+            transform_and_merge(WEBSOCKET_FILE_PATH, ORDERS_PATH, NEW_ORDERS_PATH)
+    
+    # WEBSOCKET_FILE_PATH, ORDER_DETAILS_PATH, NEW_ORDERS_PATH = get_file_paths("20240129")
+    # transform_and_merge(WEBSOCKET_FILE_PATH, ORDER_DETAILS_PATH, NEW_ORDERS_PATH)
+    
     end_time = time.time()
     execution_time = end_time - start_time
     return func.HttpResponse(f"Execution time: {execution_time} seconds")

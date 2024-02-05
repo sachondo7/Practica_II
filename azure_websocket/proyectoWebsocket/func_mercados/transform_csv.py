@@ -5,9 +5,8 @@ import numpy as np
 def mark_and_filter_bad_data(df, df_final, df_websocket, ORDERS_PATH):
     # Agrega una nueva columna "Detalles" y establece su valor en una cadena vacía para los datos "malos"
     df_final['Detalles'] = ''
-    df_final.loc[df_final['Monto'] == '0', 'Detalles'] += 'Monto inválido - '
+    df_final.loc[(df_final['Monto'] == '0') | (df_final['Monto'] == '-'), 'Detalles'] += 'Monto inválido - '
     df_final.loc[df_final['Tipo operación'] == '0', 'Detalles'] += 'Tipo operación inválido - '
-    df_final.loc[df_final['Cantidad'] == 0, 'Detalles'] += 'Cantidad inválida - '
     df_final.loc[df_final['Precio'] == '0', 'Detalles'] += 'Precio inválido - '
 
     for index, row in df_websocket.iterrows():
@@ -47,11 +46,11 @@ def write_new_orders(df, NEW_ORDERS_PATH):
     print(df)
     df.to_csv(NEW_ORDERS_PATH, sep=';', index=False)
 
-def transform_and_merge(ORDERS_PATH, NEW_ORDERS_PATH, WEBSOCKET_FILE_PATH):
+def transform_and_merge(WEBSOCKET_FILE_PATH, ORDERS_PATH, NEW_ORDERS_PATH):
     df = pd.read_csv(ORDERS_PATH, sep=';')
     orders_final = df.copy()  # Creo una copia del DataFrame original
     df = transform_data(df)
     df_websocket = pd.read_excel(WEBSOCKET_FILE_PATH)
     df = update_prices(df, df_websocket)
-    write_new_orders(df)
-    mark_and_filter_bad_data(df, orders_final, df_websocket)
+    write_new_orders(df, NEW_ORDERS_PATH)
+    mark_and_filter_bad_data(df, orders_final, df_websocket, ORDERS_PATH)
