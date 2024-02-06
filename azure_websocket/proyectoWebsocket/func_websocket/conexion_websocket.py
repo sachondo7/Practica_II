@@ -14,9 +14,8 @@ longest_json_data = None
 longest_json_length = 0
 
 # WebSocket message callback
-async def on_message():
+async def on_message(WEBSOCKET_URL, OUTPUT_EXCEL_PATH, ORDERS_PATH):
     global longest_json_data, longest_json_length
-    WEBSOCKET_URL, OUTPUT_EXCEL_PATH, ORDERS_PATH = get_file_paths("20240129")
     df_nemos = pd.read_csv(ORDERS_PATH, sep=";", on_bad_lines='warn')
     symbols_to_process = df_nemos['Nemotécnico'].unique().tolist()
     message_count = 0  # Count the number of messages received

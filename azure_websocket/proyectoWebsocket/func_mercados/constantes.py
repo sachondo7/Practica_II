@@ -3,11 +3,15 @@ import pandas as pd
 import sys
 from datetime import datetime
 from shutil import copyfile
+import glob
 
 def get_file_paths(date_str):
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     DATA_DIR = os.path.join(BASE_DIR, "data", date_str)
-    WEBSOCKET_FILE_PATH = os.path.join(BASE_DIR, "data/datos_websocket.xlsx")
+    WEBSOCKET_FILE_PATH = glob.glob(os.path.join(DATA_DIR, "datos_websocket*.xlsx"))
+    if not WEBSOCKET_FILE_PATH:
+        raise FileNotFoundError("No se encontró el archivo de datos del websocket")
+    WEBSOCKET_FILE_PATH = WEBSOCKET_FILE_PATH[0]
     ORDERS_PATH = os.path.join(DATA_DIR, "orders_{}_11.00.csv".format(date_str))
 
     # Obtener la hora actual y formatearla como una cadena de texto
