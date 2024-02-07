@@ -40,7 +40,7 @@ lista_correos = ["email1", "email2", ...]
 
 Este archivo debe contener las consultas que se quieran realizar siguiendo este mismo formato: 
 
-'''
+```
 query_templates = {
     'query_1': """
     -- Aquí va tu primera consulta SQL 
@@ -54,4 +54,4 @@ query_templates = {
 query_universal = """
     -- Aquí va tu consulta SQL universal
 """
-'''
+```
