@@ -51,7 +51,12 @@ query_templates = {
     ...
 }
 
-query_universal = """
-    -- Aquí va tu consulta SQL universal
-"""
+query_universal = {
+    'query_1': """
+    -- Aquí va tu primera consulta universal SQL 
+    """,
+    'query_2': """
+    -- Aquí va tu segunda consulta universal SQL 
+    """,
+}
 ```
