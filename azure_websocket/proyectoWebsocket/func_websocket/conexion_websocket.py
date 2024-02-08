@@ -33,7 +33,6 @@ async def on_message(WEBSOCKET_URL, OUTPUT_EXCEL_PATH, ORDERS_PATH):
                 if json_length > longest_json_length:
                     longest_json_data = data
                     longest_json_length = json_length
-                print("Longest JSON length: " + str(longest_json_length))
             message_count += 1
             # Close the connection after receiving 3 messages
             if message_count == 3:
@@ -42,7 +41,6 @@ async def on_message(WEBSOCKET_URL, OUTPUT_EXCEL_PATH, ORDERS_PATH):
             for security in longest_json_data["payload"]["listSecurities"]:
                 symbol = security["symbol"]
                 if symbol in symbols_to_process:
-                    print(f"Processing symbol: {symbol}")
                     df = await process_symbol(ws, symbol, df)
         await ws.close()  # Close WebSocket connection
         print("WebSocket connection closed")  # Print verification message
@@ -62,14 +60,12 @@ async def process_symbol(ws, symbol, df):
         except asyncio.TimeoutError:
             last, askPx, bidPx = None, None, None
             df = df._append({"Symbol": symbol, "Last": last, "AskPx": askPx, "BidPx": bidPx}, ignore_index=True)  # Add the data to the DataFrame
-            print(f"Symbol written to Excel: {symbol}, Last: {last}, AskPx: {askPx}, BidPx: {bidPx}")
             break
         data = json.loads(message)
         if isinstance(data, dict) and data["topic"] == "snapshot":
             last, askPx, bidPx = extract_values(data)
             if last is not None and askPx is not None and bidPx is not None:
                 df = df._append({"Symbol": symbol, "Last": last, "AskPx": askPx, "BidPx": bidPx}, ignore_index=True)  # Add the data to the DataFrame
-                print(f"Symbol written to Excel: {symbol}, Last: {last}, AskPx: {askPx}, BidPx: {bidPx}")
                 break
     # Send unsubscription message
     unsubscribe_message = create_unsubscription_message(uid)

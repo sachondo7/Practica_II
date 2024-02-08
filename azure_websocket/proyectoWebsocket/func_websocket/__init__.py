@@ -24,4 +24,5 @@ async def main(req: func.HttpRequest) -> func.HttpResponse:
 
     end_time = time.time()
     execution_time = end_time - start_time
+    print(f"Execution time: {execution_time} seconds")
     return func.HttpResponse(f"Execution time: {execution_time} seconds")

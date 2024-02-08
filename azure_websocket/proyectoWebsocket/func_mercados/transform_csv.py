@@ -8,13 +8,10 @@ def mark_and_filter_bad_data(df, df_final, df_websocket, ORDERS_PATH):
     df_final.loc[(df_final['Monto'] == '0') | (df_final['Monto'] == '-'), 'Detalles'] += 'Monto inválido - '
     df_final.loc[df_final['Tipo operación'] == '0', 'Detalles'] += 'Tipo operación inválido - '
     df_final.loc[df_final['Precio'] == '0', 'Detalles'] += 'Precio inválido - '
-
     for index, row in df_websocket.iterrows():
         if pd.isnull(row['Last']):
             df_final.loc[df_final['Nemotécnico'] == row['Symbol'], 'Detalles'] += 'Precio en linea no encontrado - '
-    
     df_final['Detalles'] = df_final['Detalles'].str.rstrip(' - ')
-    #df_final = df_final[df_final['Detalles'] != '']
     df_final.to_csv(ORDERS_PATH, sep=';', index=False)  # Escribe el DataFrame con la columna de detalles al archivo original
 
 def transform_data(df):
@@ -39,8 +36,8 @@ def update_prices(df, df_websocket):
     df['MONTO'] = df['MONTO'].fillna(0)
     df['PRECIO'] = df['PRECIO'].fillna(0)
     df['PRECIO'] = df['PRECIO'].replace(0, 1e-10)
-    # Solo actualiza la cantidad si el monto y el precio son diferentes de 0
-    df.loc[(df['MONTO'] != 0) & (df['PRECIO'] != 0), 'CANTIDAD'] = abs(np.floor(df['MONTO'] / df['PRECIO']).astype(int))
+    # Solo actualiza la cantidad si el monto y el precio son diferentes de 0 y el tipo es "C"
+    df.loc[(df['MONTO'] != 0) & (df['PRECIO'] != 0) & (df['TIPO'] == "C"), 'CANTIDAD'] = abs(np.floor(df['MONTO'] / df['PRECIO']).astype(int))
     df = df.loc[df['CANTIDAD'] != 0]
     return df
 
