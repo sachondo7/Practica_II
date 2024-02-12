@@ -17,17 +17,41 @@ Luego, sigue estos pasos:
     ` pip install -r requirements.txt `
 Este comando leerá el archivo requirements.txt en tu proyecto y descargará todas las dependencias necesarias.
 
+3. Instalar extensión de Azure Tools en VSCode y luego ejecutar: 
+    `npm install -g azure-functions-core-tools@4 --unsafe-perm true`
+
+4. Configurar archivo `local.settings.json`, asegurate de agregar las credenciales en la parte de "Values":
+
+```
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
+    "AzureWebJobsStorage": "", 
+    "API_USERNAME": {username},
+    "API_PASSWORD": {password}, 
+    "API_AUTHENTICATE_URL": "https://apiwebcbvoultechcertificacion.azurewebsites.net/api/publicapi/shared/auth/signin",
+    "API_REFRESH_TOKEN_URL": "https://apiwebcbvoultechcertificacion.azurewebsites.net/api/publicapi/shared/auth/RefreshToken",
+    "API_CAJA_URL": "https://apiwebcbvoultechcertificacion.azurewebsites.net/api/publicapi/creasys/Cajas/ConSaldoOnline",
+    "API_CARTERA_URL": "https://apiwebcbvoultechcertificacion.azurewebsites.net/api/publicapi/creasys/Cartera"
+  }
+}
+```
+
 ## Ejecución del código 
 
-3. Una vez instaladas las librerías, debes dirigirte a el directorio principal e iniciar la función de azure localmente.  
+5. Una vez instaladas las librerías, debes dirigirte a el directorio principal e iniciar la función de azure localmente.  
     ` func start `
 
-4. Una vez que el servidor de funciones esté en marcha, puedes abrir las URLs de las funciones en tu navegador para ejecutarlas. 
+6. Una vez que el servidor de funciones esté en marcha, puedes abrir las URLs de las funciones en tu navegador para ejecutarlas. 
 Por ejemplo, si tienes una función llamada `func_mercados` y otra llamada `func_websocket`, puedes abrir las siguientes URLs en tu navegador:
+
     ``` 
     http://localhost:7071/api/func_websocket
     http://localhost:7071/api/func_mercados
     ```
+
 Por la manera que está construido el programa, es necesario ejecutar primero func_websocket y luego func_mercado para que el programa funcione como se espera. 
 
 
@@ -52,6 +76,10 @@ Por la manera que está construido el programa, es necesario ejecutar primero fu
 │   └── FORMATO_CARGA_AUTOMATICA.xlsx
 ├── func_mercados
 │   ├── __init__.py
+│   ├── api
+│   │   ├── __init__.py
+│   │   └── api_client.py
+│   ├── carga_automatica_final (1).bpm
 │   ├── __pycache__
 │   ├── constantes.py
 │   ├── function.json

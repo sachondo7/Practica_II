@@ -7,7 +7,6 @@ import uuid
 from .messages import create_subscription_message, create_unsubscription_message
 from .utils import extract_values
 from io import StringIO
-
 from .constantes import get_file_paths
 
 longest_json_data = None
