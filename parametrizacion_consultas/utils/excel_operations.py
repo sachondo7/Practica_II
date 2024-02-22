@@ -63,3 +63,8 @@ def sort_dataframe_by_first_numeric_column(dataframe):
     if first_numeric_column:
         dataframe.sort_values(by=first_numeric_column, ascending=True, inplace=True)
     return dataframe
+
+def sort_dataframe_by_first_column(dataframe):
+    first_column = dataframe.columns[0]
+    dataframe.sort_values(by=first_column, ascending=True, inplace=True)
+    return dataframe
